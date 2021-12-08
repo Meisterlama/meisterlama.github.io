@@ -1,0 +1,169 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=content-language content="en">
+<meta name=color-scheme content="light dark">
+<meta name=author content="Meisterlama">
+<meta name=description content="More about myself">
+<meta name=keywords content="blog">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Lamadness">
+<meta name=twitter:description content="More about myself">
+<meta property="og:title" content="Lamadness">
+<meta property="og:description" content="More about myself">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://example.org/posts/lamadness/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-12-08T00:00:00+00:00">
+<meta property="article:modified_time" content="2021-12-08T00:00:00+00:00"><meta property="og:site_name" content="Meisterlama's Blog">
+<title>
+Lamadness · Meisterlama's Blog
+</title>
+<link rel=canonical href=http://example.org/posts/lamadness/>
+<link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin>
+<link rel=stylesheet href=/css/coder.min.728f45c9eaff821acb9cccdb60c81cf16be81bd890ee22cc5b5f4dbf276a082f.css integrity="sha256-co9Fyer/ghrLnMzbYMgc8WvoG9iQ7iLMW19NvydqCC8=" crossorigin=anonymous media=screen>
+<link rel=stylesheet href=/css/coder-dark.min.aa883b9ce35a8ff4a2a5008619005175e842bb18a8a9f9cc2bbcf44dab2d91fa.css integrity="sha256-qog7nONaj/SipQCGGQBRdehCuxioqfnMK7z0Tastkfo=" crossorigin=anonymous media=screen>
+<link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32>
+<link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16>
+<link rel=apple-touch-icon href=/images/apple-touch-icon.png>
+<link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png>
+<meta name=generator content="Hugo 0.89.4">
+</head>
+<body class="preload-transitions colorscheme-auto">
+<div class=float-container>
+<a id=dark-mode-toggle class=colorscheme-toggle>
+<i class="fa fa-adjust fa-fw" aria-hidden=true></i>
+</a>
+</div>
+<main class=wrapper>
+<nav class=navigation>
+<section class=container>
+<a class=navigation-title href=/>
+Meisterlama's Blog
+</a>
+<input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle>
+<i class="fa fa-bars fa-fw" aria-hidden=true></i>
+</label>
+<ul class=navigation-list>
+<li class=navigation-item>
+<a class=navigation-link href=/about/>About</a>
+</li>
+<li class=navigation-item>
+<a class=navigation-link href=/posts/>Blog</a>
+</li>
+<li class=navigation-item>
+<a class=navigation-link href=/projects/>Projects</a>
+</li>
+<li class="navigation-item menu-separator">
+<span>|</span>
+</li>
+<li class=navigation-item>
+<a href=http://example.org/fr/>🇫🇷 Francais</a>
+</li>
+</ul>
+</section>
+</nav>
+<div class=content>
+<section class="container post">
+<article>
+<header>
+<div class=post-title>
+<h1 class=title>
+<a class=title-link href=http://example.org/posts/lamadness/>
+Lamadness
+</a>
+</h1>
+</div>
+<div class=post-meta>
+<div class=date>
+<span class=posted-on>
+<i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2021-12-08T00:00:00Z>
+December 8, 2021
+</time>
+</span>
+<span class=reading-time>
+<i class="fa fa-clock-o" aria-hidden=true></i>
+3-minute read
+</span>
+</div>
+</div>
+</header>
+<div>
+<p><strong>Note:</strong> This article is not complete. It is still being written and <br>
+the project is not yet finished</p>
+<h2 id=introduction>
+Introduction
+<a class=heading-link href=#introduction>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>I always wanted to write an emulator. For some reasons, it seemed like magic to me,
+and something I could never do. I tried to write a CHIP-8 emulator, and a spark
+happened in me : I wanted more.</p>
+<p>I started to gather info on how i could emulate this console, and i found pretty
+good resources like the 6502&rsquo;s manual with all the specifications of the NES&rsquo;s CPU.</p>
+<p>I also followed a bit of <a href=https://bugzmanov.github.io/nes_ebook>bugzmanov&rsquo;s tutorial</a> (itself written in rust) but I felt
+like some of his code was not how I imagined it. One of the only thing that comes
+straight from this tutorial is the iNES file parser, but I am feeling like I want
+to make my own, and be able to parse iNES2.0</p>
+<p>So I started by emulating the CPU. I had to implement all the the instruction set.</p>
+<p>For this task, I used many resources :</p>
+<ul>
+<li><a href=http://www.oxyron.de/html/opcodes02.html>A site regrouping the opcode matrix and all the commands</a></li>
+<li><a href=http://archive.6502.org/datasheets/rockwell_r650x_r651x.pdf>A pdf about the 6502&rsquo;s chip family</a></li>
+<li><a href=http://wiki.nesdev.com/w/index.php/Nesdev_Wiki>Nesdev Wiki</a></li>
+<li><a href=http://www.obelisk.me.uk/6502/reference.html>This site for all instructions that were not clear to implement</a></li>
+</ul>
+<p>The 6502 doesn&rsquo;t have a lot of instructions <em>per se</em> with its 56 instructions
+(as far as i know, x86 have more than 400 mnemonics) but it still is a whole lot of text to type.
+With all the addressing modes and the illegal operations, it steps up to 256 operations to handle.
+Instead, I extracted all the informations needed in a CSV file, enumerating all the instructions,
+their addressing modes and their execution cycles.
+Then i parsed this file and generated every instructions bodies, and a list
+mapping every opcode to the correct addressing mode and function.</p>
+<p>An item in my instruction list looks like this :</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust>Instruction { <span style=color:#75715e>//00
+</span><span style=color:#75715e></span>    name: <span style=color:#e6db74>&#34;BRK&#34;</span>,
+    addr_mode: <span style=color:#a6e22e>AddressingMode</span>::Implied,
+    command: <span style=color:#a6e22e>CPU</span>::brk,
+    cycles: <span style=color:#ae81ff>7</span>,
+    page_boundary: <span style=color:#a6e22e>false</span>,
+}
+</code></pre></div><h2 id=the-addressing-modes>
+The addressing modes
+<a class=heading-link href=#the-addressing-modes>
+<i class="fa fa-link" aria-hidden=true></i>
+</a>
+</h2>
+<p>The 6502 has 12 addressing modes. An addressing mode tells the cpu where to
+look for the data it needs to perform the operations.
+I had a pretty hard time grasping the concept, but in the end, it is quite
+like learning pointers in C. I implemented the addressing mode by having
+a function which return an effective memory address, based on the addressing mode
+used. For example <code>LDA #$01</code> is the instruction LDA in immediate addressing mode.
+In immediate addressing, the byte that comes just after the instruction byte will
+be the data used by the instruction. Once assembled <code>LDA #$01</code> become <code>$A9 $01</code>.
+<code>$A9</code> is the instruction byte, so the data we&rsquo;re interested to is <code>$01</code>.
+Because we are executing the instruction <code>$A9</code>, this is the data read at
+<code>program_counter</code>, so the <code>$01</code> is stored at <code>program_counter + 1</code></p>
+</div>
+<footer>
+</footer>
+</article>
+</section>
+</div>
+<footer class=footer>
+<section class=container>
+©
+2021
+Meisterlama
+·
+Powered by <a href=https://gohugo.io/>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/>Coder</a>.
+</section>
+</footer>
+</main>
+<script src=/js/coder.min.03b17769f4f91ae35667e1f2a1ca8c16f50562576cf90ff32b3179926914daa5.js integrity="sha256-A7F3afT5GuNWZ+HyocqMFvUFYlds+Q/zKzF5kmkU2qU="></script>
+</body>
+</html>
