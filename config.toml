@@ -1,0 +1,83 @@
+baseURL = "http://example.org/"
+languageCode = "en"
+
+theme = "hugo-coder"
+
+paginate = 20
+pygmentsCodeFences = true
+pygmentsCodeFencesGuessSyntax = true
+enableEmoji = true
+
+[params]
+    keywords = "blog"
+    # avatarURL = "https://www.gravatar.com/avatar/daecb64e66a76b129ae991133315d8e2?s=200"
+    gravatar = "baptiste_suzon@hotmail.com"
+    colorScheme = "auto"
+
+
+[taxonomies]
+    category = "categories"
+    series = "series"
+    tag = "tags"
+
+## SOCIALS
+
+[[params.social]]
+    name = "Github"
+    icon = "fa fa-2x fa-github"
+    weight = 1
+    url = "https://github.com/Meisterlama/"
+
+[[params.social]]
+    name = "LinkedIn"
+    icon = "fa fa-2x fa-linkedin"
+    weight = 1
+    url = "https://www.linkedin.com/in/baptiste-suzon/"
+
+## LOCALIZATION
+
+## ENGLISH
+[languages.en]
+    languageName = ":uk: English"
+    title = "Meisterlama's Blog"
+    author = "Meisterlama"
+    info = "Student in Video Game Programming"
+    description = "Ths is my website"
+
+[[languages.en.menu.main]]
+    name = "About"
+    weight = 1
+    url = "about/"
+
+[[languages.en.menu.main]]
+    name = "Blog"
+    weight = 2
+    url = "posts/"
+
+[[languages.en.menu.main]]
+    name = "Projects"
+    weight = 3
+    url = "projects/"
+
+## FRENCH
+[languages.fr]
+    languageName = ":fr: Francais"
+    title = "Blog de Meisterlama"
+    author = "Meisterlama"
+    info = "Étudiant en programmation de jeux vidéos"
+    description = "Ths is my website"
+
+[[languages.fr.menu.main]]
+    name = "A propos"
+    weight = 1
+    url = "about/"
+
+[[languages.fr.menu.main]]
+    name = "Blog"
+    weight = 2
+    url = "posts/"
+
+[[languages.fr.menu.main]]
+    name = "Projets"
+    weight = 3
+    url = "projects/"
