@@ -1,4 +1,4 @@
-baseURL = "http://example.org/"
+baseURL = "https://meisterlama.github.io/"
 languageCode = "en"
 
 theme = "hugo-coder"
@@ -7,7 +7,6 @@ paginate = 100
 pygmentsCodeFences = true
 pygmentsCodeFencesGuessSyntax = true
 enableEmoji = true
-
 
 [params]
     keywords = "blog"
