@@ -1,0 +1,11 @@
+<h2>Center of interest</h2>
+<ul id="coi">
+  {{- range .Paginator.Pages -}}
+    {{ if eq .Params.type "coi"}}
+      <li style="justify-content: space-between; align-items: flex-start; height: min-content;">
+        <p>{{ .Title }}</p>
+          {{.Content}}
+      </li>
+    {{ end }}
+  {{- end -}}
+</ul>

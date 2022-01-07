@@ -1,0 +1,12 @@
+<h2>Education</h2>
+<ul>
+  {{- range .Paginator.Pages -}}
+    {{ if eq .Params.type "education"}}
+      <li style="justify-content: space-between; align-items: center; height: 2em;">
+        <p><i>{{.Params.duration}}</i></p>
+        <span class="itemLine"></span>
+        <p>{{.Params.formation}}</p>
+      </li>
+    {{ end }}
+  {{- end -}}
+</ul>

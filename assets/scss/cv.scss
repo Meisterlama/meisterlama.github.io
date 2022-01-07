@@ -1,0 +1,54 @@
+@import "variables";
+@import "cv_dark";
+@import "cv_light";
+
+#cv {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-evenly;
+}
+
+#cv.div.panel {
+  border-radius: 50%;
+}
+
+#cv {
+  h2,
+  p {
+    margin: 0;
+    text-align: left;
+  }
+}
+
+
+#coi {
+  li
+  {
+    p {
+      text-align: right;
+    }
+  }
+}
+
+.projects {
+  p {
+    font-size: 1em;
+    line-height: 1.2em;
+    font-style: italic;
+  }
+}
+.projectTitle{
+  font-size: 1.4em;
+  line-height: 1.3em;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+
+.projectTitleNoLink{
+  font-size: 1.4em;
+  line-height: 1.3em;
+  text-decoration: underline;
+  font-weight: normal;
+}

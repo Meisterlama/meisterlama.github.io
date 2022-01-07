@@ -3,16 +3,20 @@ languageCode = "en"
 
 theme = "hugo-coder"
 
-paginate = 20
+paginate = 100
 pygmentsCodeFences = true
 pygmentsCodeFencesGuessSyntax = true
 enableEmoji = true
+
 
 [params]
     keywords = "blog"
     # avatarURL = "https://www.gravatar.com/avatar/daecb64e66a76b129ae991133315d8e2?s=200"
     gravatar = "baptiste_suzon@hotmail.com"
     colorScheme = "auto"
+    customCSS = ["css/cv.css"]
+    customSCSS = ["scss/cv.scss"]
+    customJS = ["js/cv.js"]
 
 
 [taxonomies]
@@ -58,6 +62,12 @@ enableEmoji = true
     name = "Projects"
     weight = 3
     url = "projects/"
+
+
+[[languages.en.menu.main]]
+    name = "CV"
+    weight = 4
+    url = "cv/"
 
 ## FRENCH
 [languages.fr]

@@ -1,0 +1,12 @@
+<h2>Languages</h2>
+<ul>
+  {{- range .Paginator.Pages -}}
+    {{ if eq .Params.type "language"}}
+      <li style="justify-content: space-between; align-items: center; height: 2em;">
+        <p>{{.Params.language}}</p>
+        <span class="itemLine"></span>
+        <p><i>{{.Params.level}}</i></p>
+      </li>
+    {{ end }}
+  {{- end -}}
+</ul>

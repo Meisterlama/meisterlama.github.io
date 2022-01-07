@@ -1,0 +1,14 @@
+<h2>Skills & Tools</h2>
+<ul>
+  {{- range .Paginator.Pages -}}
+    {{ if eq .Params.type "skill"}}
+      <li style="justify-content: space-between; align-items: center; height: 2em;">
+        <p>{{ .Title }}</p>
+        <p> {{- range .Params.values -}}
+            {{.}},&nbsp
+            {{- end -}}
+        </p>
+      </li>
+    {{ end }}
+  {{- end -}}
+</ul>

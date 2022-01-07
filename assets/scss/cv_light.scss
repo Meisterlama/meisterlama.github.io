@@ -1,0 +1,58 @@
+@mixin cv_light {
+  div.panel {
+    background-color: $alt-bg-color-dark;
+    color: $fg-color-dark;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $alt-fg-color-dark;
+  }
+
+  a {
+    color: $link-color-dark;
+  }
+
+  .content {
+    .post {
+      .tags {
+        .tag {
+          background-color: $alt-bg-color-dark;
+
+          a {
+            color: $fg-color-dark;
+          }
+          a:active {
+            color: $fg-color-dark;
+          }
+        }
+      }
+    }
+    .list {
+      ul {
+        li {
+          .title {
+            color: $fg-color-dark;
+
+            &:hover,
+            &:focus {
+              color: $link-color-dark;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .itemLine {
+    flex-grow: 1;border-bottom: 1px solid $fg-color-dark; margin: 5px;
+  }
+}
+
+#cv.colorscheme-light {
+  @include cv_light()
+}

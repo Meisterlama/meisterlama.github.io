@@ -1,0 +1,20 @@
+<h2>Infos</h2>
+<ul>
+  {{- range .Paginator.Pages -}}
+    {{ if eq .Params.type "info"}}
+      <li style="flex-direction: row; justify-content: space-between; align-items: center; height: 2em;">
+      <p style="text-align: left;"><i>{{.Params.infoType}}</i> </p> 
+
+      <span class="itemLine"></span>
+
+      <p>
+        {{ if .Params.link }}
+        <a href="{{ .Params.link | default .RelPermalink }}">{{.Params.value}}</a>
+        {{ else }}
+        {{.Params.value}}
+        {{ end }}
+      </p>
+      </li>
+    {{ end }}
+  {{- end -}}
+</ul>

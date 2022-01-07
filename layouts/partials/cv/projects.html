@@ -1,0 +1,17 @@
+<h2>Projects</h2>
+<ul class="projects">
+  {{- range .Paginator.Pages -}}
+  
+    {{ if eq .Params.type "project"}}
+      <li style="flex-direction: column; justify-content: flex-start; align-items: flex-start;">
+      {{ if .Params.externalLink }}
+        <a class="projectTitle" href="{{ .Params.externalLink | default .RelPermalink }}">{{ .Title }}</a>
+      {{ else }}
+        <a class="projectTitleNoLink">{{ .Title }}</a>
+      {{ end }}
+      
+      {{.Content}}
+      </li>
+    {{ end }}
+  {{- end -}}
+</ul>
