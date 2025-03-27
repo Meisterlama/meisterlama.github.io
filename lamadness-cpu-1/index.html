@@ -1,0 +1,456 @@
+<!doctype html>
+<html class="not-ready lg:text-base" lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Title -->
+  <title>
+    Lamadness: CPU Implementation Part1 - Meisterlama
+  </title>
+
+  <!-- Meta -->
+  <meta name="theme-color" />
+
+  
+  <!-- Author -->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  <meta name="description" content="Custom NES emulator written in Rust" />
+  <meta name="author" content="Meisterlama" />
+  <!-- The Open Graph protocol -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Lamadness: CPU Implementation Part1" />
+  <meta property="og:site_name" content="Meisterlama" />
+  <meta property="og:description" content="Custom NES emulator written in Rust" />
+  <meta property="og:url" content="https:&#x2F;&#x2F;blog.meisterlama.fr&#x2F;lamadness-cpu-1&#x2F;" />
+  
+  <!---->
+  
+  <!---->
+  
+  <!---->
+  
+  <meta property="og:image" content="https://blog.meisterlama.fr/icons/github.svg" />
+  
+  <!---->
+  
+
+  <!-- CSS & JS -->
+  <link rel="preload stylesheet" as="style" href="https://blog.meisterlama.fr/main.css" />
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --bg-dark: #18181b;
+      --header: #e4e4e7;
+      --header-dark: #27272a;
+    }
+  </style>
+
+  
+
+  <!-- Dark Icon -->
+  <link rel="preload" as="image" href="https://blog.meisterlama.fr/icons/theme.svg" />
+
+  <!-- Math -->
+  
+  <!---->
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css"
+  crossorigin="anonymous"
+/>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js"
+  crossorigin="anonymous"
+></script>
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js"
+  crossorigin="anonymous"
+></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () =>
+    renderMathInElement(document.body, {
+      // customised options
+      // • auto-render specific keys, e.g.:
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+      ],
+      // • rendering keys, e.g.:
+      throwOnError: false,
+    }),
+  );
+</script>
+
+  <!---->
+  
+  <!---->
+
+  <!-- Mermaid -->
+  
+  <!---->
+  <script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+  const initMermaid = (isDark) => {
+    mermaid.initialize({
+      theme: isDark ? "dark" : "default",
+      startOnLoad: false,
+    });
+    mermaid.run();
+  };
+
+  // Add data-mermaid-code attribute on all mermaid block.
+  document.querySelectorAll(".mermaid").forEach((element) => {
+    element.setAttribute("data-mermaid-code", element.innerHTML);
+  });
+
+  // Re-render mermaid when theme changed.
+  document.body.addEventListener("set-theme", (e) => {
+    document.querySelectorAll(".mermaid").forEach((element) => {
+      const mermaidCode = element.getAttribute("data-mermaid-code");
+      if (mermaidCode != null) {
+        element.removeAttribute("data-processed");
+        element.innerHTML = mermaidCode;
+      }
+    });
+    initMermaid(e.detail === "dark");
+  });
+
+  // The es module script will load defer, so the localStorage should already be set by script in header.
+  // If this script is loaded first, the script in header will dispatch an event to re-render mermaid, it's works too.
+  initMermaid(localStorage.getItem("dark") === "true");
+</script>
+
+  <!---->
+  
+  <!---->
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://blog.meisterlama.fr/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://blog.meisterlama.fr/apple-touch-icon.png" />
+
+  <!-- Feeds -->
+  
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https:&#x2F;&#x2F;blog.meisterlama.fr&#x2F;lamadness-cpu-1&#x2F;" />
+
+  <!-- Head inject -->
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header
+  class="header fixed top-0 z-40 mx-auto min-h-[3.5rem] w-full"
+>
+  <div class="mx-auto w-full max-w-4xl p-3 lg:flex lg:justify-between">
+    <div class="flex justify-between">
+      <div class="flex items-center">
+        <a class="text-2xl font-semibold" href="https://blog.meisterlama.fr">Meisterlama</a>
+        <div
+          class="btn-dark ml-4 h-6 w-6 shrink-0 cursor-pointer text-[0] [background:url(./icons/theme.svg)_left_center/cover_no-repeat] dark:invert dark:[background-position:right]"
+          role="button"
+          aria-label="Dark"
+        ></div>
+      </div>
+      
+      <div
+        class="btn-menu relative z-50 flex h-8 w-8 shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+        role="button"
+        aria-label="Menu"
+      ></div>
+      
+    </div>
+    <script>
+      // base
+      const htmlClass = document.documentElement.classList;
+      setTimeout(() => {
+        htmlClass.remove("not-ready");
+      }, 10);
+
+      // mobile menu
+      const btnMenu = document.querySelector(".btn-menu");
+      btnMenu?.addEventListener("click", () => {
+        htmlClass.toggle("open");
+      });
+
+      // dark theme
+      const setDark = (isDark) => {
+        if (isDark) {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "dark" }));
+          htmlClass.add("dark");
+        } else {
+          document.body.dispatchEvent(new CustomEvent("set-theme", { detail: "light" }));
+          htmlClass.remove("dark");
+        }
+        localStorage.setItem("dark", isDark);
+      };
+
+      // init
+      const darkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+      if (htmlClass.contains("dark")) {
+        setDark(true);
+      } else {
+        const darkVal = localStorage.getItem("dark");
+        setDark(darkVal ? darkVal === "true" : darkScheme.matches);
+      }
+
+      // listen system
+      darkScheme.addEventListener("change", (event) => {
+        setDark(event.matches);
+      });
+
+      // manual switch
+      const btnDark = document.querySelector(".btn-dark");
+      btnDark.addEventListener("click", () => {
+        setDark(localStorage.getItem("dark") !== "true");
+      });
+    </script>
+    
+    <nav class="flex w-full items-center lg:w-auto">
+      <ul
+        class="nav-wrapper flex w-full flex-col py-2 lg:w-auto lg:flex-row lg:self-center lg:py-0"
+      >
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://blog.meisterlama.fr/projects"
+            >Projects</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://blog.meisterlama.fr/archive"
+            >Archive</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://blog.meisterlama.fr/tags"
+            >Tags</a
+          >
+        </li>
+        
+        <li>
+          <a
+            class="primary-link block py-2 text-center text-lg font-medium lg:px-3 lg:py-0"
+            href="https://blog.meisterlama.fr/about"
+            >About</a
+          >
+        </li>
+        
+      </ul>
+      <!-- Header Nav inject -->
+      
+    </nav>
+    
+  </div>
+</header>
+
+
+    <!-- Body Start inject -->
+    
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl break-words px-4 pb-16 pt-32 dark:prose-invert prose-pre:rounded-lg prose-img:rounded-lg"
+    >
+      
+<article>
+  <!-- Page Start inject -->
+  
+
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">Lamadness: CPU Implementation Part1</h1>
+    <div class="text-sm antialiased opacity-60">
+  
+  <time>2021-12-08</time>
+  <span class="mx-1">&middot;</span>
+  <span>3min</span>
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <span class="mx-1">&middot;</span>
+  <span>Meisterlama</span>
+  
+  <!-- Page Info inject -->
+  
+</div>
+
+  </header>
+
+  
+
+  <!-- TOC -->
+  <!---->
+<div class="block-bg mb-12 flex rounded-lg p-2 text-lg">
+  <details>
+    <summary class="cursor-pointer py-1 pl-4">
+      <span>Table of Contents</span>
+    </summary>
+    <div class="px-2">
+      <ul>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://blog.meisterlama.fr/lamadness-cpu-1/#introduction"
+            >Introduction</a
+          >
+          
+        </li>
+        
+        <li>
+          <a class="no-underline hover:underline" href="https://blog.meisterlama.fr/lamadness-cpu-1/#the-addressing-modes"
+            >The addressing modes</a
+          >
+          
+        </li>
+        
+      </ul>
+    </div>
+  </details>
+</div>
+
+<!---->
+
+  <!-- Content -->
+  <section><p>I always wanted to write an emulator. For some reasons, it seemed like magic to me,
+and something I could never do. I tried to write a CHIP-8 emulator, and a spark
+happened in me : I wanted more.</p>
+<span id="continue-reading"></span>
+<p><strong>Note:</strong> This article is not complete. It is still being written and <br />
+the project is not yet finished</p>
+<h2 id="introduction">Introduction</h2>
+<p>I started to gather info on how I could emulate this console, and i found pretty
+good resources like the 6502's manual with all the specifications of the NES's CPU.</p>
+<p>I also followed a bit of <a href="https://bugzmanov.github.io/nes_ebook">bugzmanov's tutorial</a> (itself written in rust) but I felt
+like some of his code was not how I imagined it. One of the only thing that comes
+straight from this tutorial is the iNES file parser, but I am feeling like I want
+to make my own, and be able to parse iNES2.0</p>
+<p>So I started by emulating the CPU. I had to implement all the the instruction set.</p>
+<p>For this task, I used many resources :</p>
+<ul>
+<li><a href="http://www.oxyron.de/html/opcodes02.html">A site regrouping the opcode matrix and all the commands</a></li>
+<li><a href="http://archive.6502.org/datasheets/rockwell_r650x_r651x.pdf">A pdf about the 6502's chip family</a></li>
+<li><a href="http://wiki.nesdev.com/w/index.php/Nesdev_Wiki">Nesdev Wiki</a></li>
+<li><a href="http://www.obelisk.me.uk/6502/reference.html">This site for all instructions that were not clear to implement</a></li>
+</ul>
+<p>The 6502 doesn't have a lot of instructions <em>per se</em> with its 56 instructions
+(as far as i know, x86 have more than 400 mnemonics) but it still is a whole lot of text to type.
+With all the addressing modes and the illegal operations, it steps up to 256 operations to handle.
+Instead, I extracted all the informations needed in a CSV file, enumerating all the instructions,
+their addressing modes and their execution cycles.
+Then i parsed this file and generated every instructions bodies, and a list
+mapping every opcode to the correct addressing mode and function.</p>
+<p>An item in my instruction list looks like this :</p>
+<pre data-lang="rust" style="background-color:#2b303b;color:#c0c5ce;" class="language-rust "><code class="language-rust" data-lang="rust"><span>Instruction { </span><span style="color:#65737e;">//00
+</span><span>    name: &quot;</span><span style="color:#a3be8c;">BRK</span><span>&quot;,
+</span><span>    addr_mode: AddressingMode::Implied,
+</span><span>    command: </span><span style="color:#d08770;">CPU</span><span>::brk,
+</span><span>    cycles: </span><span style="color:#d08770;">7</span><span>,
+</span><span>    page_boundary: </span><span style="color:#d08770;">false</span><span>,
+</span><span>}
+</span></code></pre>
+<h2 id="the-addressing-modes">The addressing modes</h2>
+<p>The 6502 has 12 addressing modes. An addressing mode tells the cpu where to
+look for the data it needs to perform the operations.
+I had a pretty hard time grasping the concept, but in the end, it is quite
+like learning pointers in C. I implemented the addressing mode by having
+a function which return an effective memory address, based on the addressing mode
+used. For example <code>LDA #$01</code> is the instruction LDA in immediate addressing mode.
+In immediate addressing, the byte that comes just after the instruction byte will
+be the data used by the instruction. Once assembled <code>LDA #$01</code> become <code>$A9 $01</code>.
+<code>$A9</code> is the instruction byte, so the data we're interested to is <code>$01</code>.
+Because we are executing the instruction <code>$A9</code>, this is the data read at
+<code>program_counter</code>, so the <code>$01</code> is stored at <code>program_counter + 1</code></p>
+</section>
+
+  <hr />
+
+  <!-- Post Taxonomies -->
+  
+<footer class="mt-12 flex flex-col">
+  <!---->
+  <!---->
+  <!---->
+  <!---->
+  
+  <div class="mb-2 flex flex-wrap">
+    <span class="block-bg mb-1.5 mr-1.5 rounded-lg px-5 py-1.5">Tags </span>
+    
+    <a
+      class="block-bg block-hover mb-1.5 mr-1.5 rounded-lg px-5 py-1.5 no-underline"
+      href="https://blog.meisterlama.fr/tags/emulation/"
+      >emulation</a
+    >
+    
+  </div>
+  
+</footer>
+
+<!---->
+
+  <!-- Post Nav -->
+  
+<!---->
+
+  <!-- Comment -->
+  
+
+  <!-- Page End inject -->
+  
+</article>
+
+    </main>
+
+    <footer class="mx-auto flex max-w-3xl flex-wrap items-center px-8 py-4 text-sm opacity-60">
+  <div class="mr-auto basis-full lg:basis-1/2">
+    <!---->
+    <!---->
+    &copy; 2020 - 2025<!---->
+    
+    <a class="link" href="https://blog.meisterlama.fr">
+      Meisterlama
+    </a>
+     |<!---->
+    <!---->
+    <a class="link" href="https:&#x2F;&#x2F;creativecommons.org&#x2F;licenses&#x2F;by-sa&#x2F;4.0&#x2F;deed" rel="noopener" target="_blank">
+      CC BY-SA 4.0
+    </a>
+    <!---->
+    
+  </div>
+  <div class="flex basis-full lg:basis-1/2 lg:justify-end">
+    <a class="link mr-6 lg:ml-6" href="https://www.getzola.org/" rel="noopener" target="_blank">
+      Powered by Zola
+    </a>
+    <a class="link" href="https://github.com/st1020/kita" rel="noopener" target="_blank">✎ Kita</a>
+  </div>
+  <!-- Footer inject -->
+  
+</footer>
+
+
+    <!-- Body End inject -->
+    
+  </body>
+</html>
