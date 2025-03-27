@@ -6,7 +6,6 @@ description = "Custom NES emulator written in Rust"
 
 [taxonomies]
 tags = ["emulation"]
-categories = []
 +++
 
 I always wanted to write an emulator. For some reasons, it seemed like magic to me,
